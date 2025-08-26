@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Time Logger</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Developer Time Logger</h1>
+    </header>
+
+    <section class="settings-section">
+      <details>
+        <!-- Updated summary to show PAT expiry info -->
+        <summary id="settingsSummary">Settings</summary>
+        <div class="settings-content">
+          <!-- Added back organization field to settings -->
+          <div class="form-group">
+            <label for="organization">Organization:</label>
+            <input type="text" id="organization" placeholder="Enter your organization name">
+          </div>
+          
+          <div class="form-group">
+            <label for="pat">Personal Access Token:</label>
+            <div class="pat-input-group">
+              <input type="password" id="pat" placeholder="Enter your PAT">
+              <button type="button" id="togglePat" class="toggle-btn">👁</button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="date" id="expiryDate">
+          </div>
+          
+          <!-- Added help text for getting PAT -->
+          <div class="pat-help">
+            <p><strong>How to get PAT:</strong></p>
+            <p>Go to Azure DevOps dashboard → User settings → Personal access tokens → Create new token → name and set expiry date → remember the expiry date → copy the one time reveal PAT to be pasted</p>
+          </div>
+          
+          <div class="settings-buttons">
+            <button type="button" id="savePat" class="save-btn">Save</button>
+            <button type="button" id="replacePat" class="replace-btn" style="display: none;">Replace PAT</button>
+            <button type="button" id="clearPat" class="clear-btn">Clear</button>
+          </div>
+          
+          <div id="patStatus" class="pat-status"></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- Add Task Section -->
+    <section class="add-task-section">
+      <h2>Add Time Log
+        <!-- Added retry button to manually fetch current page details -->
+        <button type="button" id="retryButton" class="retry-btn" title="Detect current Azure DevOps work item">🔄</button>
+      </h2>
+      <form id="addTaskForm">
+        <!-- Changed organization from dropdown to input box that auto-populates from settings -->
+        <div class="form-group">
+          <label for="organizationInput">Organization:</label>
+          <input type="text" id="organizationInput" placeholder="Enter organization name" required>
+        </div>
+        
+        <div class="form-group" id="projectSelectorGroup">
+          <label for="projectSelector">Project:</label>
+          <select id="projectSelector" required>
+            <option value="">Select project...</option>
+          </select>
+          <div id="projectLoading" class="loading-indicator" style="display: none;">Loading projects...</div>
+        </div>
+        
+        <div class="form-group" id="workItemSelectorGroup">
+          <label for="workItemSelector">Work Item:</label>
+          <select id="workItemSelector" required>
+            <option value="">Select work item...</option>
+            <optgroup label="My Work Items" id="addTaskWorkItemsGroup">
+              <!-- Work items will be populated here -->
+            </optgroup>
+            <optgroup label="My Backlog" id="addTaskBacklogGroup">
+              <!-- Backlog items will be populated here -->
+            </optgroup>
+          </select>
+          <div id="workItemLoading" class="loading-indicator" style="display: none;">Loading work items...</div>
+          <div id="workItemError" class="error-message" style="display: none;"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="taskDate">Date:</label>
+          <input type="date" id="taskDate" required>
+        </div>
+        
+        <div class="time-inputs">
+          <div class="form-group">
+            <label for="hours">Hours:</label>
+            <input type="number" id="hours" min="0" max="23" value="0" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="minutes">Minutes:</label>
+            <input type="number" id="minutes" min="0" max="59" value="0" required>
+          </div>
+        </div>
+        
+        <button type="submit" class="add-btn">Add Time Log</button>
+      </form>
+    </section>
+
+    <!-- View Logs Section -->
+    <section class="view-logs-section">
+      <h2>View Logs</h2>
+      <div class="form-group">
+        <label for="filterDate">Filter by Date:</label>
+        <input type="date" id="filterDate">
+      </div>
+      
+      <!-- Updated view section with cascading dropdowns for filtering -->
+      <div class="form-group">
+        <label for="viewOrgSelector">Organization:</label>
+        <select id="viewOrgSelector">
+          <option value="">All organizations</option>
+        </select>
+      </div>
+      
+      <div class="form-group" id="viewProjectSelectorGroup" style="display: none;">
+        <label for="viewProjectSelector">Project:</label>
+        <select id="viewProjectSelector">
+          <option value="">All projects</option>
+        </select>
+        <div id="viewProjectLoading" class="loading-indicator" style="display: none;">Loading projects...</div>
+      </div>
+      
+      <div class="form-group" id="viewWorkItemSelectorGroup" style="display: none;">
+        <label for="viewWorkItemSelector">Work Item:</label>
+        <select id="viewWorkItemSelector">
+          <option value="">All work items</option>
+          <optgroup label="My Work Items" id="viewWorkItemsGroup">
+            <!-- Work items will be populated here -->
+          </optgroup>
+          <optgroup label="My Backlog" id="viewBacklogGroup">
+            <!-- Backlog items will be populated here -->
+          </optgroup>
+        </select>
+        <div id="viewWorkItemLoading" class="loading-indicator" style="display: none;">Loading work items...</div>
+        <div id="viewWorkItemError" class="error-message" style="display: none;"></div>
+      </div>
+      
+      <div id="taskList" class="task-list">
+        <p class="no-tasks">Select a date to view tasks</p>
+      </div>
+      
+      <div id="dailyTotal" class="daily-total">
+        <strong>Total Time Spent - 0h 0m</strong>
+      </div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

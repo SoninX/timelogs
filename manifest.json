@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Developer Time Logger",
+  "version": "1.0",
+  "description": "Log and track time spent on development tasks",
+  "permissions": ["storage", "activeTab", "tabs"],
+  "host_permissions": ["https://dev.azure.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://dev.azure.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Developer Time Logger",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  }
+}
