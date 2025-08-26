@@ -1,36 +1,35 @@
-// Declare chrome variable to fix lint/correctness/noUndeclaredVariables error
-const chrome = globalThis.chrome || self.chrome
+// background.js
+let currentWorkItem = null;
 
-let currentWorkItem = null
-
+// Listener for messages from content scripts or popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log("[v0] Background received message:", message, "from sender:", sender)
-
-  if (message.type === "WORK_ITEM_DETECTED") {
-    currentWorkItem = message.workItem
-    console.log("[v0] Stored current work item:", currentWorkItem)
-    if (currentWorkItem && typeof currentWorkItem.id === "string") {
-      currentWorkItem.id = Number.parseInt(currentWorkItem.id)
-    }
-    sendResponse({ success: true })
-  } else if (message.type === "CLEAR_WORK_ITEM") {
-    currentWorkItem = null
-    console.log("[v0] Cleared current work item")
-    sendResponse({ success: true })
-  } else if (message.type === "GET_CURRENT_WORK_ITEM") {
-    console.log("[v0] Returning current work item:", currentWorkItem)
-    sendResponse(currentWorkItem)
+  switch (message.type) {
+    case "WORK_ITEM_DETECTED":
+      currentWorkItem = message.workItem;
+      sendResponse({ success: true, received: "WORK_ITEM_DETECTED" });
+      break;
+    case "CLEAR_WORK_ITEM":
+      currentWorkItem = null;
+      sendResponse({ success: true, received: "CLEAR_WORK_ITEM" });
+      break;
+    case "GET_CURRENT_WORK_ITEM":
+      sendResponse(currentWorkItem);
+      break;
   }
+  return true; // Indicates an asynchronous response
+});
 
-  return true
-})
-
-// Clear work item info when tab is closed or navigated away from Azure DevOps
+// Listener for tab updates to trigger re-scans on navigation
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url && !changeInfo.url.includes("dev.azure.com")) {
-    currentWorkItem = null
-    console.log("[v0] Cleared work item - navigated away from Azure DevOps")
+  // When a tab finishes loading a URL that includes dev.azure.com
+  if (changeInfo.status === 'complete' && tab.url && tab.url.includes('dev.azure.com')) {
+    // Send a message to the content script in that tab to run its detection logic
+    chrome.tabs.sendMessage(tabId, { type: "RUN_DETECTION" }, response => {
+      // This can fail if the content script isn't on the page (which is normal).
+      // We check chrome.runtime.lastError to prevent an error from appearing in the console.
+      if (chrome.runtime.lastError) {
+        // console.log("Content script not available on this tab.");
+      }
+    });
   }
-})
-
-console.log("[v0] Background script loaded")
+});

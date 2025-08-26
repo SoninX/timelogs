@@ -1,9 +1,9 @@
-# timelogextension
+# New chat
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/abhimanyups999-8986s-projects/v0-timelogextension)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/MrSJTyJzJBJ)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/mdrayanharoors-projects/v0-new-chat)
+[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/KnDrNSJpFJB)
 
 ## Overview
 
@@ -14,13 +14,13 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://vercel.com/abhimanyups999-8986s-projects/v0-timelogextension](https://vercel.com/abhimanyups999-8986s-projects/v0-timelogextension)**
+**[https://vercel.com/mdrayanharoors-projects/v0-new-chat](https://vercel.com/mdrayanharoors-projects/v0-new-chat)**
 
 ## Build your app
 
 Continue building your app on:
 
-**[https://v0.app/chat/projects/MrSJTyJzJBJ](https://v0.app/chat/projects/MrSJTyJzJBJ)**
+**[https://v0.app/chat/projects/KnDrNSJpFJB](https://v0.app/chat/projects/KnDrNSJpFJB)**
 
 ## How It Works
 
